@@ -1,0 +1,13 @@
+<h1>
+Welcome to users list
+</h1>
+
+<ul>
+<% users.forEach(function(item,k){ %>
+<li><%= item.id  %> :
+<a href=" list/<%= item.id  %>">
+    <%= item.name  %>
+        </a>
+        </li>
+        <% }) %>
+</ul>

@@ -1,0 +1,87 @@
+
+<% if (msg=="chat") {%>
+<%if(user){%>
+<h1>
+    you logged in
+</h1>
+
+<html>
+<h6>
+  userId : <%= user.id%>
+</h6>
+<h6>
+    userName: <%= user.name%>
+</h6><br>
+<ul id="future"></ul>
+<form id="form" id="chat_form">
+    <textarea id="chat_input"></textarea>
+    <input type="submit" value="Send">
+</form>
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/socket.io.js"></script>
+<script>
+    var socket = io.connect();
+    socket.on('connect', function(data) {
+        console.log('browser connected')
+        socket.emit('hi2', 'I am from Browser');
+
+    });
+    socket.on('hiFromServer',function(data){
+        console.log('welcome from server ',data)
+    })
+    socket.on('updateMessages', function(data) {
+        console.log(data)
+        $('#future').html('')
+        for(var i in data){
+            $('#future').append('<li>no of msg:'+i+','+ (data[i] ? data[i].replace(/\n/g,"<br/>"): '')+ "</li>");
+        }
+    });
+
+
+    $('form').submit(function(e){
+        e.preventDefault();
+        var message = $('#chat_input').val()+" ,"+"name of sender :<%=user.name%>";
+        socket.emit('newMessage', message);
+    });
+</script>
+
+</html>
+<%}else{%>
+<h1>you dont have account !!</h1>
+
+<%}%>
+
+
+
+<%}else{%>
+<html>
+<body>
+
+<% if (user ==''){%>
+
+<h1>
+    user not found !!
+</h1>
+
+<%}else{%>
+<h1>
+    you logged in
+</h1>
+
+<ul>
+
+    <li>id = <%= user.id  %>
+
+    </li>
+    <li>name = <%= user.name  %>
+
+    </li>
+
+</ul>
+</body>
+</html>
+<%}%>
+
+
+<%}%>
+
